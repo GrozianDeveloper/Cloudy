@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    let keyForRequest = "9d6e5eeb669940c98df0c3deb0ab1fef"
+    let keyForRequest = "721fcdbf6bd44bdf8e804034f720c0de"
     @IBOutlet weak var containerView: UIView!
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -19,9 +19,9 @@ class ViewController: UIViewController {
     
 }
 //    func decodePages() {
-//        if let pagesw = UserDefaults.standard.data(forKey: "pages") {
+//        if let pagesW = UserDefaults.standard.data(forKey: "pages") {
 //        let decoder = JSONDecoder()
-//        if let decodedPages = try? decoder.decode([locationParam].self, from: pagesw) {
+//        if let decodedPages = try? decoder.decode([locationParam].self, from: pagesW) {
 //            self.pages = decodedPages
 //        }
 //        }

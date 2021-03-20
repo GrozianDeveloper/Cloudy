@@ -54,9 +54,6 @@ struct CurrentWeatherWeatherbit: Codable {
     let icon: String //
 }
 
-
-
-
 //MARK: HourlyWeatherbit !!
 //https://api.weatherbit.io/v2.0/forecast/hourly?lat=44.7404&lon=33.853576&key=5f210cde805d4ea782ff4e4c3fbbbfb9&hours=48
 struct HourlyResponseWeatherbit: Codable {
@@ -92,14 +89,14 @@ struct weatherbitData: Codable {
     let app_max_temp: Float //feelslike
     let app_min_temp: Float
     
-    let pop: Float //% of prociptation
+    let pop: Float //precipitation%
     let precip: Float //mm
     let rh: Float //%
     let pres: Float //mb
     let vis: Float
     let uv: Float
     
-    let clouds: Float //% coverage
+    let clouds: Float //coverage%
     let wind_cdir_full: String //wind direction
     let wind_spd: Float //ms
     
@@ -109,7 +106,6 @@ struct weatherbitData: Codable {
     let moon_phase_lunation: Float // 0 = New moon, 0.50 = Full Moon, 0.75 = Last quarter moon
     let moonrise_ts: Int
     let moonset_ts: Int
-    
     
     let weather: weatherbitWeather
 }

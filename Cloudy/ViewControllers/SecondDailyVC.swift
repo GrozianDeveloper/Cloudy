@@ -9,9 +9,6 @@ import UIKit
 
 class SecondDailyViewController: UIViewController {
     
-    //circle.fill
-    
-    
     var bit: weatherbitData!
     
     @IBOutlet var dateLabel: UILabel!
@@ -22,10 +19,11 @@ class SecondDailyViewController: UIViewController {
     @IBOutlet var presLabel: UILabel!
     @IBOutlet var windDirectLabel: UILabel!
     @IBOutlet var cloudUVLabel: UILabel!
-    @IBOutlet var precipLabel: UILabel!
+
     @IBOutlet var snowRainLabel: UILabel!
     @IBOutlet var sunriseSetLabel: UILabel!
     @IBOutlet var moonriseSetLabel: UILabel!
+
     
     func configure() {
         var style = "HelveticaNeue-Light"
@@ -52,6 +50,7 @@ class SecondDailyViewController: UIViewController {
         cloudUVLabel.text = "Cloud coverage \(Int(bit.clouds))%, maximu UV index \(NSString(format:"%.1f", bit.uv)) \(getUVIndexTitle(with: Int(bit.uv)))"
         cloudUVLabel.font = UIFont(name: style, size: 24)
         
+
         snowRainLabel.text = "Snow \(NSString(format:"%.1f", bit.snow)) mm,                         Rain \(NSString(format:"%.1f", bit.precip)) mm"
         snowRainLabel.font = UIFont(name: style, size: 23)
         sunriseSetLabel.text = "Sunrise and sunset at     \(getHourForLabels(Date(timeIntervalSince1970: Double(bit.sunrise_ts)))) and \(getHourForLabels(Date(timeIntervalSince1970: Double(bit.sunset_ts))))."

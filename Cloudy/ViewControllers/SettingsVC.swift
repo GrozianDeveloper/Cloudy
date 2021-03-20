@@ -25,13 +25,21 @@ class SettingsVC: UIViewController {
     }
     
     @IBAction func useFahrenheitSwitch(_ sender: UISwitch) {
-        if sender.isOn { isUseFahrenheit = true }
-        else { isUseFahrenheit = false }
+        if sender.isOn {
+            isUseFahrenheit = true
+        }
+        else {
+            isUseFahrenheit = false
+        }
     }
     
     @IBAction func useAmericanStyleSwitch(_ sender: UISwitch) {
-        if sender.isOn { isStyleAmerican = true }
-        else { isStyleAmerican = false }
+        if sender.isOn {
+            isStyleAmerican = true
+        }
+        else {
+            isStyleAmerican = false
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -43,10 +51,10 @@ class SettingsVC: UIViewController {
             UserDefaults.standard.set(isStyleAmerican, forKey: "style")
         }
     }
+    
     /*
      if value changed for useFSwitch {
      isUseFahrenheit = UserDefaults.standard.setValue(isUseFahrenheit, forKey: "units")
      }
      */
-    
 }

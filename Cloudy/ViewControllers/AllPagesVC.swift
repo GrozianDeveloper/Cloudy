@@ -9,24 +9,22 @@ import UIKit
 
 class AllPagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
-    var keyForRequest = ""
+
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var backToMain: UIButton!
     
-    var pages: [locationParam] = (UserDefaults.standard.array(forKey: "pages") as? [locationParam] ?? [locationParam(name: "", lat: "", lon: "")])
-
+    var pages: [locationParam] = UserDefaults.standard.array(forKey: "pages") as? [locationParam] ?? [locationParam(name: "", lat: "", lon: "")]
     var arrayFromURL: [locationParam] = []
     var filteredData: [locationParam]! //For started tableView
-    var finalJson = [String]() //for searchBar
     
     func decodePages() {
-        if let pagesw = UserDefaults.standard.data(forKey: "pages") {
-        let decoder = JSONDecoder()
-        if let decodedPages = try? decoder.decode([locationParam].self, from: pagesw) {
-            self.pages = decodedPages
-        }
+        if let pagesList = UserDefaults.standard.data(forKey: "pages") {
+            let decoder = JSONDecoder()
+            if let decodedPages = try? decoder.decode([locationParam].self, from: pagesList) {
+                self.pages = decodedPages
+            }
         }
     }
     override func viewDidLoad() {
@@ -67,22 +65,23 @@ class AllPagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
             }
             catch {
                 print(error)
-                }
-                guard let result = json else {
-                    return
-                }
+            }
+            guard let result = json else {
+                return
+            }
+            
             var abc = -1
             for a in 0...result.count - 1 {
-                var b = result[a].city_name
-                if b == "San Francisco" {
+                var cityName = result[a].city_name
+                if cityName == "San Francisco" {
                     abc += 1
                     if abc >= 1 {
-                        b = ""
+                        cityName = ""
                     }
                 }
-                if b != "" {
-                    let c = locationParam(name: b, lat: "", lon: "")
-                    self.arrayFromURL.append(c)
+                if cityName != "" {
+                    let outputLocation = locationParam(name: cityName, lat: "", lon: "")
+                    self.arrayFromURL.append(outputLocation)
                 }
             }
 
@@ -145,6 +144,7 @@ class AllPagesVC: UIViewController, UITableViewDelegate, UITableViewDataSource, 
         action.backgroundColor = .green
         return action
     }
+
     //MARK: SearchBar
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredData = []

@@ -10,21 +10,14 @@ import MapKit
 import CoreLocation
 
 class MapVC: UIViewController, MKMapViewDelegate {
-
     
     @IBOutlet weak var mapView: MKMapView!
     
     var keyForRequest = UserDefaults.standard.string(forKey: "key")
-    
     var locationNameForNext = ""
-    
     var coordsForCarousel  = [String]()
     
     var pages: [locationParam] = (UserDefaults.standard.array(forKey: "pages") as? [locationParam] ?? [locationParam(name: "", lat: "", lon: "")])
-    
-
-        //UserDefaults.standard.removeObject(forKey: "pages")
-        //UserDefaults.standard.set(pages, forKey: "pages")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,15 +35,15 @@ class MapVC: UIViewController, MKMapViewDelegate {
             }
         }
     }
+    
     func encodePages() {
         let a = locationParam(name: locationNameForNext, lat: coordsForCarousel.first ?? "", lon: coordsForCarousel.last ?? "")
         if a.name != "" && a.lat != "" && a.lon !=  "" {
-        pages.append(a)
-        let encoder = JSONEncoder()
-        if let encodedPages = try? encoder.encode(pages) {
-            UserDefaults.standard.set(encodedPages, forKey: "pages")
+            pages.append(a)
+            let encoder = JSONEncoder()
+            if let encodedPages = try? encoder.encode(pages) {
+                UserDefaults.standard.set(encodedPages, forKey: "pages")
             }
-            
         }
     }
     
@@ -78,25 +71,29 @@ class MapVC: UIViewController, MKMapViewDelegate {
         
         
         annotation.coordinate = location
-        //let geocoder = CLGeocoder()
-        //let clLocation = CLLocation(latitude: location.latitude, longitude: location.latitude)
-        //geocoder.reverseGeocodeLocation(clLocation, completionHandler: { [self] placemarks, error in
-           // if error == nil {
-                //let firstLocation = placemarks?[0]
-                CurrentWeatherbitByCoords(with: "\(location.latitude)", lon: "\(location.latitude)")
+//        let geocoder = CLGeocoder()
+//        let clLocation = CLLocation(latitude: location.latitude, longitude: location.latitude)
+//        geocoder.reverseGeocodeLocation(clLocation, completionHandler: { [self] placemarks, error in
+//            if error == nil {
+//                let firstLocation = placemarks?[0]
+//                firstLocation?.locality
+//            }
+//
+//            guard let firstLocation = placemarks?.first else {
+//                return
+//            }
+            
+            let lat = "\(location.latitude)"
+            let lon = "\(location.longitude)"
+            self.coordsForCarousel = [lat, lon]
+            annotation.title = CurrentWeatherbitByCoords(with: "\(location.latitude)", lon: "\(location.latitude)")
                 
-                
-                let lat = "\(location.latitude)"
-                let lon = "\(location.longitude)"
-                self.coordsForCarousel = [lat, lon]
-                annotation.title = self.locationNameForNext
-            //}
-        //})
-    
         self.mapView.addAnnotation(annotation)
+//    })
     }
+    
     //MARK: Request for location name
-    func CurrentWeatherbitByCoords(with lat: String, lon: String) {
+        func CurrentWeatherbitByCoords(with lat: String, lon: String) -> String {
         var myURLComponents = URLComponents()
         myURLComponents.scheme = "https"
         myURLComponents.host = "api.weatherbit.io"
@@ -123,10 +120,11 @@ class MapVC: UIViewController, MKMapViewDelegate {
                 return
             }
             self.locationNameForNext = result.data.first!.city_name
+            
         }).resume()
+            return locationNameForNext
     }
-    
-    }
+}
 
 
 

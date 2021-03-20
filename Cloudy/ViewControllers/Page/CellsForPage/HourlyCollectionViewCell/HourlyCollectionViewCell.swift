@@ -47,11 +47,6 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         else if icon == "c02n" || icon == "a03n" { iconImage.image = UIImage(named: "CloudMoon") }
         else { iconImage.image = UIImage(named: "CloudSun") }
         iconImage.tintColor = .white
-        
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
     }
 
     func getHourForDate(_ date: Date?) -> String {

@@ -33,7 +33,6 @@ class TableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionView
         }
 
     func configure(with bit: [HourlyDataWeatherbit]) {
-        
         self.bit = bit
         
             collectionView.reloadData()

@@ -9,12 +9,10 @@ import UIKit
 
 class DailyTableViewCell: UITableViewCell {
     
-    
     @IBOutlet var dateLabel: UILabel!
     @IBOutlet var maxTempLabel: UILabel!
     @IBOutlet var minTempLabel: UILabel!
     @IBOutlet var iconImage: UIImageView!
-
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

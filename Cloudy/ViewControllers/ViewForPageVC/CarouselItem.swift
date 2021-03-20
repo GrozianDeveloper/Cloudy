@@ -35,7 +35,7 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
         initWithNib()
         if UserDefaults.standard.bool(forKey: "units") == true { units = "I" }
         if UserDefaults.standard.bool(forKey: "style") == true { style = "american" }
-        print(keyForRequest)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -67,7 +67,7 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
         }
     }
     
-    //MARK: Create view
+    //MARK: Creating view
     func getFullDataForView(with locationTxt: String?, lat: String?, lon: String?) {
         table.register(TableViewCell.nib(), forCellReuseIdentifier: TableViewCell.identifier)
         table.register(DailyTableViewCell.nib(), forCellReuseIdentifier: DailyTableViewCell.identifier)
@@ -95,7 +95,7 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
     
     func getDataByCoords(with lat: String, lon: String) {
         CurrentWeatherbitByCoords(with: lat, lon: lon)
-        hourlyForecastWeatherbitByCoords(with: lat, lon: lon)
+        HourlyForecastWeatherbitByCoords(with: lat, lon: lon)
         ForecastWeatherbitByCoords(with: lat, lon: lon)
     }
     
@@ -116,7 +116,7 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
         
         ForecastWeatherbitByCoords(with: "\(currentLocation.coordinate.latitude)",lon: "\(currentLocation.coordinate.longitude)")
         CurrentWeatherbitByCoords(with: "\(currentLocation.coordinate.latitude)", lon: "\(currentLocation.coordinate.longitude)")
-        hourlyForecastWeatherbitByCoords(with: "\(currentLocation.coordinate.latitude)",lon: "\(currentLocation.coordinate.longitude)")
+        HourlyForecastWeatherbitByCoords(with: "\(currentLocation.coordinate.latitude)",lon: "\(currentLocation.coordinate.longitude)")
        }
    }
     
@@ -149,20 +149,9 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
     
     
     func createTableHeader() -> UIView {
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: widthOfVC, height: widthOfVC - 125))
         
-        func getDateForLabels(_ date: Date?) -> String {
-            guard let inputDate = date else {
-                return ""
-            }
-
-            let formatter = DateFormatter()
-            formatter.dateFormat = "h:mm a"
-            return formatter.string(from: inputDate)
-        }
-        
-        let headerVIew = UIView(frame: CGRect(x: 0, y: 0, width: widthOfVC, height: widthOfVC - 125))
-        
-        headerVIew.backgroundColor = UIColor(red: 74/255, green: 142/255, blue: 202/255, alpha: 1.0)
+        headerView.backgroundColor = UIColor(red: 74/255, green: 142/255, blue: 202/255, alpha: 1.0)
         
         let locationLabel = UILabel(frame: CGRect(x: 0, y: 45, width: widthOfVC, height: 23 + 5))
         let summaryLabel = UILabel(frame: CGRect(x: 0, y: 54 + 3, width: vwContent.frame.size.width, height:50))
@@ -184,26 +173,26 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
         let pressureLabel = UILabel(frame: CGRect(x: widthOfVC / 8 * 4 + 12, y: 162 + 35 + 10, width: 80, height: 60))
         let pressureIcon = UIImageView(frame: CGRect(x: (widthOfVC / 8) * 4 + 80 + 15, y: 186 + 20 + 16, width:30, height: 23))
         
-        headerVIew.addSubview(locationLabel)
-        headerVIew.addSubview(summaryLabel)
-        headerVIew.addSubview(tempLabel)
-        headerVIew.addSubview(feelsLikeLabel)
+        headerView.addSubview(locationLabel)
+        headerView.addSubview(summaryLabel)
+        headerView.addSubview(tempLabel)
+        headerView.addSubview(feelsLikeLabel)
         
         
-        headerVIew.addSubview(sunriseLabel)
-        headerVIew.addSubview(sunriseIcon)
-        headerVIew.addSubview(sunsetLabel)
-        headerVIew.addSubview(sunsetIcon)
+        headerView.addSubview(sunriseLabel)
+        headerView.addSubview(sunriseIcon)
+        headerView.addSubview(sunsetLabel)
+        headerView.addSubview(sunsetIcon)
         
-        headerVIew.addSubview(visibilityLabel)
-        headerVIew.addSubview(visibilityIcon)
-        headerVIew.addSubview(windSpeedLabel)
-        headerVIew.addSubview(windSpeedIcon)
+        headerView.addSubview(visibilityLabel)
+        headerView.addSubview(visibilityIcon)
+        headerView.addSubview(windSpeedLabel)
+        headerView.addSubview(windSpeedIcon)
         
-        headerVIew.addSubview(humidityLabel)
-        headerVIew.addSubview(humidityIcon)
-        headerVIew.addSubview(pressureLabel)
-        headerVIew.addSubview(pressureIcon)
+        headerView.addSubview(humidityLabel)
+        headerView.addSubview(humidityIcon)
+        headerView.addSubview(pressureLabel)
+        headerView.addSubview(pressureIcon)
         
         feelsLikeLabel.textAlignment = .center
         
@@ -269,7 +258,7 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
         DispatchQueue.main.async {
             self.table.reloadData()
         }
-        return headerVIew
+        return headerView
         
     }
 
@@ -351,7 +340,7 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
     
     //MARK: Hourly
     func hourlyForecastWeatherbit(with name: String) {
-
+        //"https://api.weatherbit.io/v2.0/forecast/hourly?city=\(name)&hours=48&key=\(keyForRequest)"
         myURLComponents.scheme = "https"
         myURLComponents.host = hostForURL
         myURLComponents.path = "/v2.0/forecast/hourly"
@@ -361,8 +350,6 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
             URLQueryItem(name: "key", value: keyForRequest),
             URLQueryItem(name: "units", value: units)
         ]
-        
-        //"https://api.weatherbit.io/v2.0/forecast/hourly?city=\(name)&hours=48&key=\(keyForRequest)"
         
         URLSession.shared.dataTask(with: myURLComponents.url!.absoluteURL, completionHandler: { data, response, error in
             guard let data = data, error == nil else {
@@ -388,7 +375,7 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
         }).resume()
     }
     
-    func hourlyForecastWeatherbitByCoords(with lat: String, lon: String) {
+    func HourlyForecastWeatherbitByCoords(with lat: String, lon: String) {
         myURLComponents.scheme = "https"
         myURLComponents.host = hostForURL
         myURLComponents.path = "/v2.0/forecast/hourly"
@@ -399,6 +386,7 @@ class CarouselItem: UIView, UITableViewDelegate, CLLocationManagerDelegate, UITa
             URLQueryItem(name: "key", value: keyForRequest),
             URLQueryItem(name: "units", value: units)
         ]
+        
         URLSession.shared.dataTask(with: myURLComponents.url!, completionHandler: { data, response, error in
             guard let data = data, error == nil else {
                 print("somethingWentWrongHourlyCoords")

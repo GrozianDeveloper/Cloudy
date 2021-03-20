@@ -18,9 +18,9 @@ class EmbeddedPageVC: UIPageViewController {
     var widthOfVC : CGFloat? //For CarouselItem
     
     func decodePages() {
-        if let pagesw = UserDefaults.standard.data(forKey: "pages") {
+        if let pagesTemp = UserDefaults.standard.data(forKey: "pages") {
             let decoder = JSONDecoder()
-            if let decodedPages = try? decoder.decode([locationParam].self, from: pagesw) {
+            if let decodedPages = try? decoder.decode([locationParam].self, from: pagesTemp) {
                 self.SecondPartOfPages = decodedPages
             }
         }
@@ -67,38 +67,35 @@ class EmbeddedPageVC: UIPageViewController {
 
 
 
-    extension EmbeddedPageVC: UIPageViewControllerDataSource {
-        func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-            
-            guard let index = items.firstIndex(of: viewController), index > 0 else {
-                return nil
-            }
-            
-            let before = index - 1
-            
-            return items[before]
-        }
+extension EmbeddedPageVC: UIPageViewControllerDataSource {
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
-        func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-            guard let index = items.firstIndex(of: viewController), index < (items.count - 1) else {
-                return nil
-            }
-            
-            let after = index + 1
-            
-            return items[after]
+        guard let index = items.firstIndex(of: viewController), index > 0 else {
+            return nil
         }
-        
-        func presentationCount(for _: UIPageViewController) -> Int {
-                return items.count
-            }
-            
-            func presentationIndex(for _: UIPageViewController) -> Int {
-                guard let firstViewController = viewControllers?.first,
-                    let firstViewControllerIndex = items.firstIndex(of: firstViewController) else {
-                        return 0
-                }
-                return firstViewControllerIndex
-            }
+        let before = index - 1
+        return items[before]
     }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+        guard let index = items.firstIndex(of: viewController), index < (items.count - 1) else {
+            return nil
+        }
+        let after = index + 1
+        return items[after]
+    }
+    
+    func presentationCount(for _: UIPageViewController) -> Int {
+        return items.count
+    }
+        
+    func presentationIndex(for _: UIPageViewController) -> Int {
+        guard let firstViewController = viewControllers?.first,
+            let firstViewControllerIndex = items.firstIndex(of: firstViewController) else {
+                return 0
+        }
+        return firstViewControllerIndex
+    }
+}
 
